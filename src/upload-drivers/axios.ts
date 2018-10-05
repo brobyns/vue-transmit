@@ -118,7 +118,7 @@ export type XHRUploadGroup = {
 
 let group_id = 0;
 
-export class XHRDriver<T = any> implements DriverInterface {
+export class AxiosDriver<T = any> implements DriverInterface {
 	public context: VTransmitUploadContext;
 	public url: StaticOrDynamic<string>;
 	public method: StaticOrDynamic<string>;

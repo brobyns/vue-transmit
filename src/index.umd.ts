@@ -13,6 +13,8 @@ export {
 	DriverInterface,
 	FirebaseDriver,
 	FirebaseUploadOptions,
+	AxiosDriver,
+	AxiosDriverOptions,
 	XHRDriver,
 	XHRDriverOptions,
 	XHRUploadGroup,

@@ -10,6 +10,8 @@ import {
 	FirebaseDriver,
 	FirebaseUploadOptions,
 } from "./upload-drivers/firebase";
+import { AxiosDriver, AxiosDriverOptions } from "./upload-drivers/axios";
+
 import {
 	DriverConstructor,
 	DriverInterface,
@@ -40,6 +42,8 @@ export {
 	XHRUploadGroup,
 	FirebaseDriver,
 	FirebaseUploadOptions,
+	AxiosDriver,
+	AxiosDriverOptions,
 	DriverConstructor,
 	DriverInterface,
 	UploadErr,
