@@ -1,4 +1,4 @@
 import * as XHR from "./xhr";
-import * as Firebase from "./firebase";
+import * as Axios from "./axios";
 
-export { XHR, Firebase };
+export { XHR, Axios };
