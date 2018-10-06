@@ -7,7 +7,6 @@ node_modules
 !.prettierrc
 coverage
 tmp
-dist
 lib
 
 # Our `.*` rule covers this,
