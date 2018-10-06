@@ -245,7 +245,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 			this.http({
 				url: this.url,
 				method: this.method,
-				body: formData,
+				data: formData,
 				timeout: this.timeout,
 				withCredentials: this.withCredentials,
 				onUploadProgress: function(progressEvent?: ProgressEvent) {

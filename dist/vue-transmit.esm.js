@@ -429,7 +429,7 @@ var AxiosDriver = /** @class */ (function() {
 			_this.http({
 				url: _this.url,
 				method: _this.method,
-				body: formData,
+				data: formData,
 				timeout: _this.timeout,
 				withCredentials: _this.withCredentials,
 				onUploadProgress: function(progressEvent) {
