@@ -247,16 +247,16 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				body: formData,
 				timeout: this.timeout,
 				withCredentials: this.withCredentials,
-				onUploadProgress: function(progressEvent) {
+				onUploadProgress: function(progressEvent?: ProgressEvent) {
 					this.handleProgress(progressEvent);
 				},
-				success: function(response) {
+				success: function(response: any) {
 					return resolve({
 						ok: true,
 						data: response,
 					});
 				},
-				error: function(error) {
+				error: function(error: any) {
 					return resolve({
 						ok: false,
 						err: {

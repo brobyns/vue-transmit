@@ -5,23 +5,14 @@
 	"module": "dist/vue-transmit.esm.js",
 	"main": "dist/vue-transmit.js",
 	"types": "dist/index.d.ts",
-	"keywords": [
-		"dragndrop",
-		"drag and drop",
-		"file upload",
-		"upload"
-	],
+	"keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
 	"directories": {
 		"test": "test"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
-		"clean": "scripts/clean.js",
 		"predev": "npm run clean",
 		"dev": "cross-env NODE_ENV=development rollup -c ./rollup.config.js",
-		"prebuild": "npm run clean",
 		"build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
 		"prepublishOnly": "npm run build",
 		"test:site": "php -S localhost:3030 -t ./test/",
@@ -31,25 +22,20 @@
 		"size:min": "cat dist/vue-transmit.esm.js | wc -c",
 		"size:gzip": "gzip -c dist/vue-transmit.esm.js | wc -c",
 		"release:alpha": "standard-version --prerelease alpha",
-		"postrelease:alpha": "git push --follow-tags origin master && npm publish --tag prerelease",
+		"postrelease:alpha":
+			"git push --follow-tags origin master && npm publish --tag prerelease",
 		"release:beta": "standard-version --prerelease beta",
-		"postrelease:beta": "git push --follow-tags origin master && npm publish --tag prerelease",
+		"postrelease:beta":
+			"git push --follow-tags origin master && npm publish --tag prerelease",
 		"release": "standard-version",
 		"postrelease": "git push --follow-tags origin master && npm publish"
 	},
 	"jest": {
-		"moduleFileExtensions": [
-			"ts",
-			"tsx",
-			"js"
-		],
+		"moduleFileExtensions": ["ts", "tsx", "js"],
 		"transform": {
 			"\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
 		},
-		"testMatch": [
-			"**/__tests__/*.(ts|js)",
-			"**/?(*.)(spec|test).(js|ts)"
-		],
+		"testMatch": ["**/__tests__/*.(ts|js)", "**/?(*.)(spec|test).(js|ts)"],
 		"coverageDirectory": "coverage",
 		"collectCoverage": true,
 		"mapCoverage": true
@@ -85,7 +71,8 @@
 		"type": "git",
 		"url": "git+https://github.com/alexsasharegan/vue-transmit.git"
 	},
-	"author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
+	"author":
+		"Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/alexsasharegan/vue-dropzone/issues"

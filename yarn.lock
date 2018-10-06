@@ -3184,6 +3184,10 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
+lodash-es@^4.17.10:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
+
 lodash._reinterpolate@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
@@ -5610,6 +5614,12 @@ vue-template-validator@^1.1.5:
   resolved "https://registry.yarnpkg.com/vue-template-validator/-/vue-template-validator-1.1.5.tgz#22d1ee77d0647c1ab14ff7eb01865942d9b3c458"
   dependencies:
     chalk "^1.1.1"
+
+vue-transmit@^8.1.4:
+  version "8.1.4"
+  resolved "https://registry.yarnpkg.com/vue-transmit/-/vue-transmit-8.1.4.tgz#5e514639d4fc57991349f0cbf57e8cf15bec3038"
+  dependencies:
+    lodash-es "^4.17.10"
 
 vue@^2.5.16:
   version "2.5.17"

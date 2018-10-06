@@ -112,7 +112,6 @@ export type XHRDriverOptions<T = any> = {
 	errUploadError?: (xhr: XMLHttpRequest) => string;
 	errUploadTimeout?: (xhr: XMLHttpRequest) => string;
 	renameFile?: (name: string) => string;
-	http?: any;
 };
 
 export type XHRUploadGroup = {
@@ -164,7 +163,6 @@ export class XHRDriver<T = any> implements DriverInterface {
 			errUploadTimeout = (_xhr: XMLHttpRequest) =>
 				`Error during upload: the server timed out.`,
 			renameFile = (name: string) => name,
-			http,
 		} = options;
 
 		if (!url) {
