@@ -80,7 +80,7 @@ import {
 } from "../core/utils";
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import { XHRDriver } from "../upload-drivers/xhr";
+import { AxiosDriver } from "../upload-drivers/axios";
 import { DriverInterface, DriverConstructor } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
@@ -283,7 +283,7 @@ export default Vue.extend({
 		},
 		driver: {
 			type: Function,
-			default: XHRDriver,
+			default: AxiosDriver,
 		},
 	},
 
@@ -847,7 +847,7 @@ export default Vue.extend({
 
 			if (this.activeFiles.length) {
 				progress.totalProgress =
-					100 * progress.totalBytesSent / progress.totalBytes;
+					(100 * progress.totalBytesSent) / progress.totalBytes;
 			}
 
 			this.$emit(VTransmitEvents.TotalUploadProgress, progress);
