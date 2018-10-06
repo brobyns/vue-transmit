@@ -1,3 +1,3 @@
 import * as XHR from "./xhr";
-import * as Firebase from "./firebase";
-export { XHR, Firebase };
+import * as Axios from "./axios";
+export { XHR, Axios };

@@ -1,5 +1,4 @@
 import Vue from "vue";
-import firebase from "firebase";
 
 function is_function(x) {
 	return typeof x == "function";
@@ -1629,65 +1628,6 @@ var VueTransmit = Vue.extend({
 	},
 });
 
-var FirebaseDriver = /** @class */ (function() {
-	function FirebaseDriver(context, options) {
-		this.context = context;
-		this.options = options;
-		this.cancelTokens = Object.create(null);
-	}
-	FirebaseDriver.prototype.cancelUpload = function(file) {
-		var cancel = this.cancelTokens[file.id];
-		if (cancel) {
-			cancel();
-			delete this.cancelTokens[file.id];
-			this.context.emit(VTransmitEvents.Canceled, file);
-			return [file];
-		}
-		return [];
-	};
-	FirebaseDriver.prototype.uploadFiles = function(files) {
-		var _this = this;
-		console.log("firebase upload", { files: files });
-		var tasks = [];
-		var _loop_1 = function(i, len) {
-			var file = files[i];
-			tasks.push(
-				new Promise(function(resolve) {
-					var ref = _this.options.storageRef(file);
-					var metadata =
-						_this.options.metadata && _this.options.metadata(file);
-					var task = ref.put(files[i].nativeFile, metadata);
-					_this.cancelTokens[file.id] = function() {
-						return task.cancel();
-					};
-					task.on(firebase.storage.TaskEvent.STATE_CHANGED, {
-						complete: function() {
-							delete _this.cancelTokens[file.id];
-							resolve();
-						},
-						next: function(snapshot) {
-							_this.context.emit(
-								VTransmitEvents.UploadProgress,
-								file,
-								(snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-								snapshot.bytesTransferred
-							);
-						},
-						error: console.error,
-					});
-				})
-			);
-		};
-		for (var i = 0, len = files.length; i < len; i++) {
-			_loop_1(i, len);
-		}
-		return Promise.all(tasks).then(function() {
-			return { ok: true, data: {} };
-		});
-	};
-	return FirebaseDriver;
-})();
-
 function resolveStaticOrDynamic$1(x, files) {
 	if (is_function(x)) {
 		return x(files);
@@ -1939,7 +1879,6 @@ export {
 	VueTransmit,
 	XHRDriver,
 	ParamNameStyle,
-	FirebaseDriver,
 	AxiosDriver,
 	ErrType,
 	UploadStatuses,

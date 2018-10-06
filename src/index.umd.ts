@@ -11,8 +11,6 @@ export {
 	VueTransmitPlugin,
 	DriverConstructor,
 	DriverInterface,
-	FirebaseDriver,
-	FirebaseUploadOptions,
 	AxiosDriver,
 	AxiosDriverOptions,
 	XHRDriver,

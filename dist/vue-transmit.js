@@ -1,17 +1,13 @@
 (function(global, factory) {
 	typeof exports === "object" && typeof module !== "undefined"
-		? factory(exports, require("vue"), require("firebase"))
+		? factory(exports, require("vue"))
 		: typeof define === "function" && define.amd
-			? define(["exports", "vue", "firebase"], factory)
-			: factory((global.VueTransmit = {}), global.Vue, global.firebase);
-})(this, function(exports, Vue, firebase) {
+			? define(["exports", "vue"], factory)
+			: factory((global.VueTransmit = {}), global.Vue);
+})(this, function(exports, Vue) {
 	"use strict";
 
 	Vue = Vue && Vue.hasOwnProperty("default") ? Vue["default"] : Vue;
-	firebase =
-		firebase && firebase.hasOwnProperty("default")
-			? firebase["default"]
-			: firebase;
 
 	function is_function(x) {
 		return typeof x == "function";
@@ -1706,66 +1702,6 @@
 		},
 	});
 
-	var FirebaseDriver = /** @class */ (function() {
-		function FirebaseDriver(context, options) {
-			this.context = context;
-			this.options = options;
-			this.cancelTokens = Object.create(null);
-		}
-		FirebaseDriver.prototype.cancelUpload = function(file) {
-			var cancel = this.cancelTokens[file.id];
-			if (cancel) {
-				cancel();
-				delete this.cancelTokens[file.id];
-				this.context.emit(exports.VTransmitEvents.Canceled, file);
-				return [file];
-			}
-			return [];
-		};
-		FirebaseDriver.prototype.uploadFiles = function(files) {
-			var _this = this;
-			console.log("firebase upload", { files: files });
-			var tasks = [];
-			var _loop_1 = function(i, len) {
-				var file = files[i];
-				tasks.push(
-					new Promise(function(resolve) {
-						var ref = _this.options.storageRef(file);
-						var metadata =
-							_this.options.metadata && _this.options.metadata(file);
-						var task = ref.put(files[i].nativeFile, metadata);
-						_this.cancelTokens[file.id] = function() {
-							return task.cancel();
-						};
-						task.on(firebase.storage.TaskEvent.STATE_CHANGED, {
-							complete: function() {
-								delete _this.cancelTokens[file.id];
-								resolve();
-							},
-							next: function(snapshot) {
-								_this.context.emit(
-									exports.VTransmitEvents.UploadProgress,
-									file,
-									(snapshot.bytesTransferred / snapshot.totalBytes) *
-										100,
-									snapshot.bytesTransferred
-								);
-							},
-							error: console.error,
-						});
-					})
-				);
-			};
-			for (var i = 0, len = files.length; i < len; i++) {
-				_loop_1(i, len);
-			}
-			return Promise.all(tasks).then(function() {
-				return { ok: true, data: {} };
-			});
-		};
-		return FirebaseDriver;
-	})();
-
 	function resolveStaticOrDynamic$1(x, files) {
 		if (is_function(x)) {
 			return x(files);
@@ -2018,7 +1954,6 @@
 
 	exports.VueTransmit = VueTransmit;
 	exports.VueTransmitPlugin = VueTransmitPlugin;
-	exports.FirebaseDriver = FirebaseDriver;
 	exports.AxiosDriver = AxiosDriver;
 	exports.XHRDriver = XHRDriver;
 

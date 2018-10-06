@@ -6,10 +6,6 @@ import {
 	XHRDriverOptions,
 	XHRUploadGroup,
 } from "./upload-drivers/xhr";
-import {
-	FirebaseDriver,
-	FirebaseUploadOptions,
-} from "./upload-drivers/firebase";
 import { AxiosDriver, AxiosDriverOptions } from "./upload-drivers/axios";
 import {
 	DriverConstructor,
@@ -32,8 +28,6 @@ export {
 	ParamNameStyle,
 	XHRDriverOptions,
 	XHRUploadGroup,
-	FirebaseDriver,
-	FirebaseUploadOptions,
 	AxiosDriver,
 	AxiosDriverOptions,
 	DriverConstructor,
