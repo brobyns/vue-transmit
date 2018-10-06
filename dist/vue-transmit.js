@@ -186,7 +186,7 @@
 		VTransmitFile.prototype.handleProgress = function(e) {
 			this.startProgress();
 			var total = e.total || this.upload.total;
-			this.upload.progress = Math.min(100, 100 * e.loaded / total);
+			this.upload.progress = Math.min(100, (100 * e.loaded) / total);
 			this.upload.bytesSent = e.loaded;
 			this.upload.total = total;
 			this.upload.time = (Date.now() - this.upload.start) / 1000;
@@ -250,8 +250,8 @@
 			for (var _i = 1; _i < arguments.length; _i++) {
 				args[_i - 1] = arguments[_i];
 			}
-			(_a = this.vtransmit).$emit.apply(_a, [event].concat(args));
 			var _a;
+			(_a = this.vtransmit).$emit.apply(_a, [event].concat(args));
 		};
 		Object.defineProperty(VTransmitUploadContext.prototype, "acceptedFiles", {
 			get: function() {
@@ -1030,6 +1030,7 @@
 					: null;
 			},
 			isDraggingClass: function() {
+				var _a;
 				return (
 					(_a = {
 						"v-transmit__upload-area--is-dragging": this.dragging,
@@ -1037,7 +1038,6 @@
 					(_a[this.dragClass] = this.dragging),
 					_a
 				);
-				var _a;
 			},
 			isUploading: function() {
 				return this.uploadingFiles.length > 0;
@@ -1471,7 +1471,7 @@
 				);
 				if (this.activeFiles.length) {
 					progress.totalProgress =
-						100 * progress.totalBytesSent / progress.totalBytes;
+						(100 * progress.totalBytesSent) / progress.totalBytes;
 				}
 				this.$emit(exports.VTransmitEvents.TotalUploadProgress, progress);
 			},
@@ -1746,8 +1746,7 @@
 								_this.context.emit(
 									exports.VTransmitEvents.UploadProgress,
 									file,
-									snapshot.bytesTransferred /
-										snapshot.totalBytes *
+									(snapshot.bytesTransferred / snapshot.totalBytes) *
 										100,
 									snapshot.bytesTransferred
 								);
