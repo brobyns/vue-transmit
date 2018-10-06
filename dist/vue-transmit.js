@@ -304,14 +304,15 @@
 		}
 		return x;
 	}
+	var ParamNameStyle;
 	(function(ParamNameStyle) {
 		ParamNameStyle[(ParamNameStyle["Empty"] = 0)] = "Empty";
 		ParamNameStyle[(ParamNameStyle["Indexed"] = 1)] = "Indexed";
 		ParamNameStyle[(ParamNameStyle["Brackets"] = 2)] = "Brackets";
-	})(exports.ParamNameStyle || (exports.ParamNameStyle = {}));
+	})(ParamNameStyle || (ParamNameStyle = {}));
 	var group_id = 0;
-	var XHRDriver = /** @class */ (function() {
-		function XHRDriver(context, options) {
+	var AxiosDriver = /** @class */ (function() {
+		function AxiosDriver(context, options) {
 			this.uploadGroups = Object.create(null);
 			var url = options.url,
 				_a = options.method,
@@ -323,8 +324,7 @@
 				_d = options.paramName,
 				paramName = _d === void 0 ? "file" : _d,
 				_e = options.multipleParamNameStyle,
-				multipleParamNameStyle =
-					_e === void 0 ? exports.ParamNameStyle.Empty : _e,
+				multipleParamNameStyle = _e === void 0 ? ParamNameStyle.Empty : _e,
 				_f = options.params,
 				params = _f === void 0 ? Object.create(null) : _f,
 				_g = options.headers,
@@ -365,7 +365,8 @@
 						? function(name) {
 								return name;
 						  }
-						: _l;
+						: _l,
+				http = options.http;
 			if (!url) {
 				throw new TypeError(
 					this.constructor.name +
@@ -386,8 +387,9 @@
 			this.errUploadError = errUploadError;
 			this.errUploadTimeout = errUploadTimeout;
 			this.renameFile = renameFile;
+			this.http = http;
 		}
-		XHRDriver.prototype.uploadFiles = function(files) {
+		AxiosDriver.prototype.uploadFiles = function(files) {
 			var _this = this;
 			return new Promise(function(resolve) {
 				if (!_this.url) {
@@ -401,120 +403,22 @@
 					});
 				}
 				var xhr = new XMLHttpRequest();
-				var updateProgress = _this.handleUploadProgress(files);
+				//const updateProgress = this.handleUploadProgress(files);
 				var id = group_id++;
 				var params = resolveStaticOrDynamic(_this.params, files);
-				var headers = resolveStaticOrDynamic(_this.headers, files);
 				_this.uploadGroups[id] = { id: id, xhr: xhr, files: files };
 				for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
 					var file = files_1[_i];
 					file.driverData.groupID = id;
 					file.startProgress();
 				}
-				xhr.open(
-					resolveStaticOrDynamic(_this.method, files),
-					resolveStaticOrDynamic(_this.url, files),
-					true
-				);
-				// Setting the timeout after open because of IE11 issue:
-				// @link https://gitlab.com/meno/dropzone/issues/8
-				xhr.timeout = resolveStaticOrDynamic(_this.timeout, files);
-				xhr.withCredentials = resolveStaticOrDynamic(
-					_this.withCredentials,
-					files
-				);
-				xhr.responseType = resolveStaticOrDynamic(
-					_this.responseType,
-					files
-				);
-				xhr.addEventListener("error", function() {
-					_this.rmGroup(id);
-					resolve({
-						ok: false,
-						err: {
-							type: exports.ErrType.Any,
-							message: _this.errUploadError(xhr),
-							data: xhr,
-						},
-					});
-				});
-				xhr.upload.addEventListener("progress", updateProgress);
-				xhr.addEventListener("timeout", function() {
-					_this.rmGroup(id);
-					resolve({
-						ok: false,
-						err: {
-							type: exports.ErrType.Timeout,
-							message: _this.errUploadTimeout(xhr),
-							data: xhr,
-						},
-					});
-				});
-				xhr.addEventListener("load", function() {
-					if (
-						files[0].status === exports.UploadStatuses.Canceled ||
-						xhr.readyState !== XMLHttpRequest.DONE
-					) {
-						return;
-					}
-					// The XHR is complete, so remove the group
-					_this.rmGroup(id);
-					var response;
-					if (_this.responseParseFunc) {
-						response = _this.responseParseFunc(xhr);
-					} else {
-						response = xhr.response;
-						if (!xhr.responseType) {
-							var contentType = xhr.getResponseHeader("content-type");
-							if (
-								contentType &&
-								contentType.indexOf("application/json") > -1
-							) {
-								try {
-									response = JSON.parse(xhr.responseText);
-								} catch (err) {
-									return resolve({
-										ok: false,
-										err: {
-											message: "Invalid JSON response from server.",
-											type: exports.ErrType.Any,
-											data: err,
-										},
-									});
-								}
-							}
-						}
-					}
-					// Called on load (complete) to complete progress tracking logic.
-					updateProgress();
-					if (xhr.status < 200 || xhr.status >= 300) {
-						return resolve({
-							ok: false,
-							err: {
-								type: exports.ErrType.Any,
-								message: _this.errUploadError(xhr),
-								data: xhr,
-							},
-						});
-					}
-					return resolve({
-						ok: true,
-						data: response,
-					});
-				});
-				for (var _a = 0, _b = Object.keys(headers); _a < _b.length; _a++) {
-					var headerName = _b[_a];
-					if (headers[headerName]) {
-						xhr.setRequestHeader(headerName, headers[headerName]);
-					}
-				}
 				var formData = new FormData();
-				for (var _c = 0, _d = Object.keys(params); _c < _d.length; _c++) {
-					var key = _d[_c];
+				for (var _a = 0, _b = Object.keys(params); _a < _b.length; _a++) {
+					var key = _b[_a];
 					formData.append(key, params[key]);
 				}
-				for (var _e = 0, files_2 = files; _e < files_2.length; _e++) {
-					var file = files_2[_e];
+				for (var _c = 0, files_2 = files; _c < files_2.length; _c++) {
+					var file = files_2[_c];
 					_this.context.emit(
 						exports.VTransmitEvents.Sending,
 						file,
@@ -537,10 +441,34 @@
 						_this.renameFile(files[i].name)
 					);
 				}
-				xhr.send(formData);
+				_this.http({
+					url: _this.url,
+					body: formData,
+					timeout: _this.timeout,
+					withCredentials: _this.withCredentials,
+					onUploadProgress: function(progressEvent) {
+						this.handleProgress(progressEvent);
+					},
+					success: function(response) {
+						return resolve({
+							ok: true,
+							data: response,
+						});
+					},
+					error: function(error) {
+						return resolve({
+							ok: false,
+							err: {
+								type: exports.ErrType.Any,
+								message: error.response.data.message,
+								data: xhr,
+							},
+						});
+					},
+				});
 			});
 		};
-		XHRDriver.prototype.handleUploadProgress = function(files) {
+		AxiosDriver.prototype.handleUploadProgress = function(files) {
 			var vm = this.context.vtransmit;
 			return function onProgressFn(e) {
 				if (!e) {
@@ -575,7 +503,7 @@
 				}
 			};
 		};
-		XHRDriver.prototype.getParamName = function(file, index) {
+		AxiosDriver.prototype.getParamName = function(file, index) {
 			var paramName;
 			if (is_function(this.paramName)) {
 				paramName = this.paramName(file);
@@ -586,19 +514,19 @@
 				return paramName;
 			}
 			switch (this.multipleParamNameStyle) {
-				case exports.ParamNameStyle.Indexed:
+				case ParamNameStyle.Indexed:
 					paramName += "[" + index + "]";
 					break;
-				case exports.ParamNameStyle.Brackets:
+				case ParamNameStyle.Brackets:
 					paramName += "[]";
 					break;
-				case exports.ParamNameStyle.Empty:
+				case ParamNameStyle.Empty:
 				default:
 					break;
 			}
 			return paramName;
 		};
-		XHRDriver.prototype.cancelUpload = function(file) {
+		AxiosDriver.prototype.cancelUpload = function(file) {
 			var group = this.uploadGroups[file.driverData.groupID];
 			if (!group) {
 				return [];
@@ -607,10 +535,10 @@
 			this.rmGroup(file.driverData.groupID);
 			return group.files.slice();
 		};
-		XHRDriver.prototype.rmGroup = function(id) {
+		AxiosDriver.prototype.rmGroup = function(id) {
 			delete this.uploadGroups[id];
 		};
-		return XHRDriver;
+		return AxiosDriver;
 	})();
 
 	var VueTransmit = Vue.extend({
@@ -889,7 +817,7 @@
 			},
 			driver: {
 				type: Function,
-				default: XHRDriver,
+				default: AxiosDriver,
 			},
 		},
 		mounted: function() {
@@ -1708,15 +1636,14 @@
 		}
 		return x;
 	}
-	var ParamNameStyle;
 	(function(ParamNameStyle) {
 		ParamNameStyle[(ParamNameStyle["Empty"] = 0)] = "Empty";
 		ParamNameStyle[(ParamNameStyle["Indexed"] = 1)] = "Indexed";
 		ParamNameStyle[(ParamNameStyle["Brackets"] = 2)] = "Brackets";
-	})(ParamNameStyle || (ParamNameStyle = {}));
+	})(exports.ParamNameStyle || (exports.ParamNameStyle = {}));
 	var group_id$1 = 0;
-	var AxiosDriver = /** @class */ (function() {
-		function AxiosDriver(context, options) {
+	var XHRDriver = /** @class */ (function() {
+		function XHRDriver(context, options) {
 			this.uploadGroups = Object.create(null);
 			var url = options.url,
 				_a = options.method,
@@ -1728,7 +1655,8 @@
 				_d = options.paramName,
 				paramName = _d === void 0 ? "file" : _d,
 				_e = options.multipleParamNameStyle,
-				multipleParamNameStyle = _e === void 0 ? ParamNameStyle.Empty : _e,
+				multipleParamNameStyle =
+					_e === void 0 ? exports.ParamNameStyle.Empty : _e,
 				_f = options.params,
 				params = _f === void 0 ? Object.create(null) : _f,
 				_g = options.headers,
@@ -1769,8 +1697,7 @@
 						? function(name) {
 								return name;
 						  }
-						: _l,
-				http = options.http;
+						: _l;
 			if (!url) {
 				throw new TypeError(
 					this.constructor.name +
@@ -1791,9 +1718,8 @@
 			this.errUploadError = errUploadError;
 			this.errUploadTimeout = errUploadTimeout;
 			this.renameFile = renameFile;
-			this.http = http;
 		}
-		AxiosDriver.prototype.uploadFiles = function(files) {
+		XHRDriver.prototype.uploadFiles = function(files) {
 			var _this = this;
 			return new Promise(function(resolve) {
 				if (!_this.url) {
@@ -1807,22 +1733,120 @@
 					});
 				}
 				var xhr = new XMLHttpRequest();
-				//const updateProgress = this.handleUploadProgress(files);
+				var updateProgress = _this.handleUploadProgress(files);
 				var id = group_id$1++;
 				var params = resolveStaticOrDynamic$1(_this.params, files);
+				var headers = resolveStaticOrDynamic$1(_this.headers, files);
 				_this.uploadGroups[id] = { id: id, xhr: xhr, files: files };
 				for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
 					var file = files_1[_i];
 					file.driverData.groupID = id;
 					file.startProgress();
 				}
+				xhr.open(
+					resolveStaticOrDynamic$1(_this.method, files),
+					resolveStaticOrDynamic$1(_this.url, files),
+					true
+				);
+				// Setting the timeout after open because of IE11 issue:
+				// @link https://gitlab.com/meno/dropzone/issues/8
+				xhr.timeout = resolveStaticOrDynamic$1(_this.timeout, files);
+				xhr.withCredentials = resolveStaticOrDynamic$1(
+					_this.withCredentials,
+					files
+				);
+				xhr.responseType = resolveStaticOrDynamic$1(
+					_this.responseType,
+					files
+				);
+				xhr.addEventListener("error", function() {
+					_this.rmGroup(id);
+					resolve({
+						ok: false,
+						err: {
+							type: exports.ErrType.Any,
+							message: _this.errUploadError(xhr),
+							data: xhr,
+						},
+					});
+				});
+				xhr.upload.addEventListener("progress", updateProgress);
+				xhr.addEventListener("timeout", function() {
+					_this.rmGroup(id);
+					resolve({
+						ok: false,
+						err: {
+							type: exports.ErrType.Timeout,
+							message: _this.errUploadTimeout(xhr),
+							data: xhr,
+						},
+					});
+				});
+				xhr.addEventListener("load", function() {
+					if (
+						files[0].status === exports.UploadStatuses.Canceled ||
+						xhr.readyState !== XMLHttpRequest.DONE
+					) {
+						return;
+					}
+					// The XHR is complete, so remove the group
+					_this.rmGroup(id);
+					var response;
+					if (_this.responseParseFunc) {
+						response = _this.responseParseFunc(xhr);
+					} else {
+						response = xhr.response;
+						if (!xhr.responseType) {
+							var contentType = xhr.getResponseHeader("content-type");
+							if (
+								contentType &&
+								contentType.indexOf("application/json") > -1
+							) {
+								try {
+									response = JSON.parse(xhr.responseText);
+								} catch (err) {
+									return resolve({
+										ok: false,
+										err: {
+											message: "Invalid JSON response from server.",
+											type: exports.ErrType.Any,
+											data: err,
+										},
+									});
+								}
+							}
+						}
+					}
+					// Called on load (complete) to complete progress tracking logic.
+					updateProgress();
+					if (xhr.status < 200 || xhr.status >= 300) {
+						return resolve({
+							ok: false,
+							err: {
+								type: exports.ErrType.Any,
+								message: _this.errUploadError(xhr),
+								data: xhr,
+							},
+						});
+					}
+					return resolve({
+						ok: true,
+						data: response,
+					});
+				});
+				for (var _a = 0, _b = Object.keys(headers); _a < _b.length; _a++) {
+					var headerName = _b[_a];
+					if (headers[headerName]) {
+						xhr.setRequestHeader(headerName, headers[headerName]);
+					}
+				}
 				var formData = new FormData();
-				for (var _a = 0, _b = Object.keys(params); _a < _b.length; _a++) {
-					var key = _b[_a];
+				for (var _c = 0, _d = Object.keys(params); _c < _d.length; _c++) {
+					var key = _d[_c];
 					formData.append(key, params[key]);
 				}
-				for (var _c = 0, files_2 = files; _c < files_2.length; _c++) {
-					var file = files_2[_c];
+				for (var _e = 0, files_2 = files; _e < files_2.length; _e++) {
+					var file = files_2[_e];
 					_this.context.emit(
 						exports.VTransmitEvents.Sending,
 						file,
@@ -1845,34 +1869,10 @@
 						_this.renameFile(files[i].name)
 					);
 				}
-				_this.http({
-					url: _this.url,
-					body: formData,
-					timeout: _this.timeout,
-					withCredentials: _this.withCredentials,
-					onUploadProgress: function(progressEvent) {
-						this.handleProgress(progressEvent);
-					},
-					success: function(response) {
-						return resolve({
-							ok: true,
-							data: response,
-						});
-					},
-					error: function(error) {
-						return resolve({
-							ok: false,
-							err: {
-								type: exports.ErrType.Any,
-								message: error.response.data.message,
-								data: xhr,
-							},
-						});
-					},
-				});
+				xhr.send(formData);
 			});
 		};
-		AxiosDriver.prototype.handleUploadProgress = function(files) {
+		XHRDriver.prototype.handleUploadProgress = function(files) {
 			var vm = this.context.vtransmit;
 			return function onProgressFn(e) {
 				if (!e) {
@@ -1907,7 +1907,7 @@
 				}
 			};
 		};
-		AxiosDriver.prototype.getParamName = function(file, index) {
+		XHRDriver.prototype.getParamName = function(file, index) {
 			var paramName;
 			if (is_function(this.paramName)) {
 				paramName = this.paramName(file);
@@ -1918,19 +1918,19 @@
 				return paramName;
 			}
 			switch (this.multipleParamNameStyle) {
-				case ParamNameStyle.Indexed:
+				case exports.ParamNameStyle.Indexed:
 					paramName += "[" + index + "]";
 					break;
-				case ParamNameStyle.Brackets:
+				case exports.ParamNameStyle.Brackets:
 					paramName += "[]";
 					break;
-				case ParamNameStyle.Empty:
+				case exports.ParamNameStyle.Empty:
 				default:
 					break;
 			}
 			return paramName;
 		};
-		AxiosDriver.prototype.cancelUpload = function(file) {
+		XHRDriver.prototype.cancelUpload = function(file) {
 			var group = this.uploadGroups[file.driverData.groupID];
 			if (!group) {
 				return [];
@@ -1939,10 +1939,10 @@
 			this.rmGroup(file.driverData.groupID);
 			return group.files.slice();
 		};
-		AxiosDriver.prototype.rmGroup = function(id) {
+		XHRDriver.prototype.rmGroup = function(id) {
 			delete this.uploadGroups[id];
 		};
-		return AxiosDriver;
+		return XHRDriver;
 	})();
 
 	var VueTransmitPlugin = {
