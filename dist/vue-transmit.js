@@ -403,7 +403,7 @@
 					});
 				}
 				var xhr = new XMLHttpRequest();
-				//const updateProgress = this.handleUploadProgress(files);
+				var updateProgress = _this.handleUploadProgress(files);
 				var id = group_id++;
 				var params = resolveStaticOrDynamic(_this.params, files);
 				_this.uploadGroups[id] = { id: id, xhr: xhr, files: files };
@@ -448,7 +448,7 @@
 					timeout: _this.timeout,
 					withCredentials: _this.withCredentials,
 					onUploadProgress: function(progressEvent) {
-						this.handleProgress(progressEvent);
+						updateProgress(progressEvent);
 					},
 					success: function(response) {
 						return resolve({

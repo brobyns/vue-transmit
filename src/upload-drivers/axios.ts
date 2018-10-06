@@ -205,7 +205,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 			}
 
 			const xhr = new XMLHttpRequest();
-			//const updateProgress = this.handleUploadProgress(files);
+			const updateProgress = this.handleUploadProgress(files);
 			const id = group_id++;
 			const params = resolveStaticOrDynamic(this.params, files);
 
@@ -249,7 +249,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				timeout: this.timeout,
 				withCredentials: this.withCredentials,
 				onUploadProgress: function(progressEvent?: ProgressEvent) {
-					this.handleProgress(progressEvent);
+					updateProgress(progressEvent);
 				},
 				success: function(response: any) {
 					return resolve({
