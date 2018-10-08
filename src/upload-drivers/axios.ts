@@ -251,13 +251,14 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				onUploadProgress: function(progressEvent?: ProgressEvent) {
 					updateProgress(progressEvent);
 				},
-				success: function(response: any) {
+			})
+				.then((response: any) => {
 					return resolve({
 						ok: true,
-						data: response,
+						data: response.data,
 					});
-				},
-				error: function(error: any) {
+				})
+				.catch((error: any) => {
 					return resolve({
 						ok: false,
 						err: {
@@ -266,8 +267,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 							data: xhr,
 						},
 					});
-				},
-			});
+				});
 		});
 	}
 

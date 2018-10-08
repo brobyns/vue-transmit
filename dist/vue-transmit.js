@@ -441,22 +441,24 @@
 						_this.renameFile(files[i].name)
 					);
 				}
-				_this.http({
-					url: _this.url,
-					method: _this.method,
-					data: formData,
-					timeout: _this.timeout,
-					withCredentials: _this.withCredentials,
-					onUploadProgress: function(progressEvent) {
-						updateProgress(progressEvent);
-					},
-					success: function(response) {
+				_this
+					.http({
+						url: _this.url,
+						method: _this.method,
+						data: formData,
+						timeout: _this.timeout,
+						withCredentials: _this.withCredentials,
+						onUploadProgress: function(progressEvent) {
+							updateProgress(progressEvent);
+						},
+					})
+					.then(function(response) {
 						return resolve({
 							ok: true,
-							data: response,
+							data: response.data,
 						});
-					},
-					error: function(error) {
+					})
+					.catch(function(error) {
 						return resolve({
 							ok: false,
 							err: {
@@ -465,8 +467,7 @@
 								data: xhr,
 							},
 						});
-					},
-				});
+					});
 			});
 		};
 		AxiosDriver.prototype.handleUploadProgress = function(files) {
