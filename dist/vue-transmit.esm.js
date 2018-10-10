@@ -1044,12 +1044,21 @@ var VueTransmit = Vue.extend({
 				if (this.useBinarySizeBase) {
 					units = "MiB";
 				}
+				file.errorData = {
+					fileSize: fileSize,
+					maxFileSize: this.maxFileSize,
+					units: units,
+				};
 				return done(
 					this.errMaxFileSizeExceeded(fileSize, this.maxFileSize, units)
 				);
 			}
 			// File type check
 			if (!this.isValidFileType(file, this.acceptedFileTypes)) {
+				file.errorData = {
+					fileType: file.type,
+					acceptedFileTypes: this.acceptedFileTypes,
+				};
 				return done(
 					this.errInvalidFileType(file.type, this.acceptedFileTypes, file)
 				);

@@ -31,7 +31,7 @@ export declare class VTransmitFile {
 	width: number;
 	height: number;
 	errorMessage: string;
-	errorData: AnyObject;
+	errorData: Object;
 	thumbnailLoaded: boolean;
 	/**
 	 * `adapterData` is data meant for use by an upload adapter only.
