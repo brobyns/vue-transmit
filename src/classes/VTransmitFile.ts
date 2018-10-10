@@ -35,6 +35,7 @@ export class VTransmitFile {
 	public width: number = 0;
 	public height: number = 0;
 	public errorMessage: string = "";
+	public errorData: AnyObject = {};
 	public thumbnailLoaded: boolean = false;
 
 	/**
@@ -72,7 +73,7 @@ export class VTransmitFile {
 	handleProgress(e: ProgressEvent): void {
 		this.startProgress();
 		const total = e.total || this.upload.total;
-		this.upload.progress = Math.min(100, 100 * e.loaded / total);
+		this.upload.progress = Math.min(100, (100 * e.loaded) / total);
 		this.upload.bytesSent = e.loaded;
 		this.upload.total = total;
 		this.upload.time = (Date.now() - this.upload.start) / 1000;

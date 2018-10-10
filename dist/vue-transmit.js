@@ -149,6 +149,7 @@
 			this.width = 0;
 			this.height = 0;
 			this.errorMessage = "";
+			this.errorData = {};
 			this.thumbnailLoaded = false;
 			/**
 			 * `adapterData` is data meant for use by an upload adapter only.
@@ -1436,6 +1437,7 @@
 					var file = files_4[_i];
 					file.status = exports.UploadStatuses.Error;
 					file.errorMessage = message;
+					file.errorData = data;
 					file.endProgress();
 					this.$emit(exports.VTransmitEvents.Error, file, message, data);
 					this.$emit(exports.VTransmitEvents.Complete, file);

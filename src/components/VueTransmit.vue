@@ -882,6 +882,7 @@ export default Vue.extend({
 			for (const file of files) {
 				file.status = UploadStatuses.Error;
 				file.errorMessage = message;
+				file.errorData = data;
 				file.endProgress();
 				this.$emit(VTransmitEvents.Error, file, message, data);
 				this.$emit(VTransmitEvents.Complete, file);

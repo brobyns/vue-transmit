@@ -143,6 +143,7 @@ var VTransmitFile = /** @class */ (function() {
 		this.width = 0;
 		this.height = 0;
 		this.errorMessage = "";
+		this.errorData = {};
 		this.thumbnailLoaded = false;
 		/**
 		 * `adapterData` is data meant for use by an upload adapter only.
@@ -1377,6 +1378,7 @@ var VueTransmit = Vue.extend({
 				var file = files_4[_i];
 				file.status = UploadStatuses.Error;
 				file.errorMessage = message;
+				file.errorData = data;
 				file.endProgress();
 				this.$emit(VTransmitEvents.Error, file, message, data);
 				this.$emit(VTransmitEvents.Complete, file);
