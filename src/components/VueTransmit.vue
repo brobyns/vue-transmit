@@ -256,13 +256,23 @@ export default Vue.extend({
 		errInvalidFileType: {
 			type: Function,
 			default(type: string, _acceptedTypes: string[], _file: VTransmitFile) {
-				return `You can't upload files of this type: ${type}`;
+				return {
+					label: "upload.invalid_file_type",
+					data: {
+						fileType: type,
+					},
+				};
 			},
 		},
 		errMaxFilesExceeded: {
 			type: Function,
 			default(maxFiles: number) {
-				return `You can not upload any more files (${maxFiles} max).`;
+				return {
+					label: "upload.max_files_exceeded",
+					data: {
+						maxFiles: maxFiles,
+					},
+				};
 			},
 		},
 		/**
@@ -544,7 +554,6 @@ export default Vue.extend({
 				if (this.useBinarySizeBase) {
 					units = "MiB";
 				}
-				file.errorData = { fileSize, maxFileSize: this.maxFileSize, units };
 				return done(
 					this.errMaxFileSizeExceeded(fileSize, this.maxFileSize, units)
 				);
@@ -552,10 +561,6 @@ export default Vue.extend({
 
 			// File type check
 			if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-				file.errorData = {
-					fileType: file.type,
-					acceptedFileTypes: this.acceptedFileTypes,
-				};
 				return done(
 					this.errInvalidFileType(file.type, this.acceptedFileTypes, file)
 				);
@@ -890,7 +895,6 @@ export default Vue.extend({
 			for (const file of files) {
 				file.status = UploadStatuses.Error;
 				file.errorMessage = message;
-				file.errorData = data;
 				file.endProgress();
 				this.$emit(VTransmitEvents.Error, file, message, data);
 				this.$emit(VTransmitEvents.Complete, file);

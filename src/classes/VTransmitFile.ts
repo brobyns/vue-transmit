@@ -35,7 +35,6 @@ export class VTransmitFile {
 	public width: number = 0;
 	public height: number = 0;
 	public errorMessage: string = "";
-	public errorData: Object = {};
 	public thumbnailLoaded: boolean = false;
 
 	/**

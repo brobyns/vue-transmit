@@ -143,7 +143,6 @@ var VTransmitFile = /** @class */ (function() {
 		this.width = 0;
 		this.height = 0;
 		this.errorMessage = "";
-		this.errorData = {};
 		this.thumbnailLoaded = false;
 		/**
 		 * `adapterData` is data meant for use by an upload adapter only.
@@ -773,13 +772,23 @@ var VueTransmit = Vue.extend({
 		errInvalidFileType: {
 			type: Function,
 			default: function(type, _acceptedTypes, _file) {
-				return "You can't upload files of this type: " + type;
+				return {
+					label: "upload.invalid_file_type",
+					data: {
+						fileType: type,
+					},
+				};
 			},
 		},
 		errMaxFilesExceeded: {
 			type: Function,
 			default: function(maxFiles) {
-				return "You can not upload any more files (" + maxFiles + " max).";
+				return {
+					label: "upload.max_files_exceeded",
+					data: {
+						maxFiles: maxFiles,
+					},
+				};
 			},
 		},
 		/**
@@ -1044,21 +1053,12 @@ var VueTransmit = Vue.extend({
 				if (this.useBinarySizeBase) {
 					units = "MiB";
 				}
-				file.errorData = {
-					fileSize: fileSize,
-					maxFileSize: this.maxFileSize,
-					units: units,
-				};
 				return done(
 					this.errMaxFileSizeExceeded(fileSize, this.maxFileSize, units)
 				);
 			}
 			// File type check
 			if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-				file.errorData = {
-					fileType: file.type,
-					acceptedFileTypes: this.acceptedFileTypes,
-				};
 				return done(
 					this.errInvalidFileType(file.type, this.acceptedFileTypes, file)
 				);
@@ -1387,7 +1387,6 @@ var VueTransmit = Vue.extend({
 				var file = files_4[_i];
 				file.status = UploadStatuses.Error;
 				file.errorMessage = message;
-				file.errorData = data;
 				file.endProgress();
 				this.$emit(VTransmitEvents.Error, file, message, data);
 				this.$emit(VTransmitEvents.Complete, file);
