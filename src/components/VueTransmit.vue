@@ -244,10 +244,13 @@ export default Vue.extend({
 		errMaxFileSizeExceeded: {
 			type: Function,
 			default(fileSize: number, maxFileSize: number, units: string) {
-				return (
-					`The file is too big (${round(fileSize, 1)}${units}).` +
-					` Max file size: ${round(maxFileSize, 1)}${units}.`
-				);
+				return {
+					label: "upload.filesize_too_big",
+					data: {
+						fileSize: round(fileSize, 1),
+						maxFileSize: round(maxFileSize, 1),
+					},
+				};
 			},
 		},
 		errInvalidFileType: {

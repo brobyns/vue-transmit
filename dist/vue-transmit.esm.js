@@ -761,13 +761,13 @@ var VueTransmit = Vue.extend({
 		errMaxFileSizeExceeded: {
 			type: Function,
 			default: function(fileSize, maxFileSize, units) {
-				return (
-					"The file is too big (" +
-					round(fileSize, 1) +
-					units +
-					")." +
-					(" Max file size: " + round(maxFileSize, 1) + units + ".")
-				);
+				return {
+					label: "upload.filesize_too_big",
+					data: {
+						fileSize: round(fileSize, 1),
+						maxFileSize: round(maxFileSize, 1),
+					},
+				};
 			},
 		},
 		errInvalidFileType: {
