@@ -449,6 +449,7 @@
 						timeout: _this.timeout,
 						withCredentials: _this.withCredentials,
 						onUploadProgress: function(progressEvent) {
+							console.log(progressEvent);
 							updateProgress(progressEvent);
 						},
 					})
