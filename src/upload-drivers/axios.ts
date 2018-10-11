@@ -249,6 +249,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				timeout: this.timeout,
 				withCredentials: this.withCredentials,
 				onUploadProgress: function(progressEvent?: ProgressEvent) {
+					console.log(progressEvent);
 					updateProgress(progressEvent);
 				},
 			})
