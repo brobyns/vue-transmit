@@ -1260,7 +1260,9 @@
 							thumbnail
 						);
 						if (callback) {
-							return callback(thumbnail);
+							canvas.toBlob(function(blob) {
+								return callback(blob);
+							});
 						}
 					},
 					false

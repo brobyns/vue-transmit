@@ -715,7 +715,7 @@ export default Vue.extend({
 					this.$emit(VTransmitEvents.Thumbnail, file, thumbnail);
 
 					if (callback) {
-						return callback(thumbnail);
+						canvas.toBlob(blob => callback(blob));
 					}
 				},
 				false

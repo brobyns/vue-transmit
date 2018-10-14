@@ -1215,7 +1215,9 @@ var VueTransmit = Vue.extend({
 					file.dataUrl = thumbnail;
 					_this.$emit(VTransmitEvents.Thumbnail, file, thumbnail);
 					if (callback) {
-						return callback(thumbnail);
+						canvas.toBlob(function(blob) {
+							return callback(blob);
+						});
 					}
 				},
 				false
