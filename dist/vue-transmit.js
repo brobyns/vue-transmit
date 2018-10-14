@@ -1260,7 +1260,7 @@
 							thumbnail
 						);
 						if (callback) {
-							return callback();
+							return callback(thumbnail);
 						}
 					},
 					false
