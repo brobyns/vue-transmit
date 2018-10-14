@@ -362,8 +362,8 @@
 				_l = options.renameFile,
 				renameFile =
 					_l === void 0
-						? function(name) {
-								return name;
+						? function(file) {
+								return file.name;
 						  }
 						: _l,
 				http = options.http;
@@ -438,7 +438,7 @@
 					formData.append(
 						_this.getParamName(files[i], i),
 						files[i].nativeFile,
-						_this.renameFile(files[i].name)
+						_this.renameFile(files[i])
 					);
 				}
 				_this

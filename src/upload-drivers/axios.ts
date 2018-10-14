@@ -106,7 +106,7 @@ export type AxiosDriverOptions<T = any> = {
 	responseParseFunc?: (xhr: XMLHttpRequest) => T;
 	errUploadError?: (xhr: XMLHttpRequest) => string;
 	errUploadTimeout?: (xhr: XMLHttpRequest) => string;
-	renameFile?: (name: string) => string;
+	renameFile?: (name: VTransmitFile) => string;
 	http: any;
 };
 
@@ -131,7 +131,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 	public responseType: StaticOrDynamic<XMLHttpRequestResponseType>;
 	public errUploadError: (xhr: XMLHttpRequest) => string;
 	public errUploadTimeout: (xhr: XMLHttpRequest) => string;
-	public renameFile: (name: string) => string;
+	public renameFile: (name: VTransmitFile) => string;
 	public responseParseFunc?: (xhr: XMLHttpRequest) => T;
 	public http: any;
 
@@ -162,7 +162,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				`Error during upload: ${xhr.statusText} [${xhr.status}]`,
 			errUploadTimeout = (_xhr: XMLHttpRequest) =>
 				`Error during upload: the server timed out.`,
-			renameFile = (name: string) => name,
+			renameFile = (file: VTransmitFile) => file.name,
 			http,
 		} = options;
 
@@ -238,7 +238,7 @@ export class AxiosDriver<T = any> implements DriverInterface {
 				formData.append(
 					this.getParamName(files[i], i),
 					files[i].nativeFile,
-					this.renameFile(files[i].name)
+					this.renameFile(files[i])
 				);
 			}
 

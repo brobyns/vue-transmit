@@ -91,7 +91,7 @@ export declare type AxiosDriverOptions<T = any> = {
 	responseParseFunc?: (xhr: XMLHttpRequest) => T;
 	errUploadError?: (xhr: XMLHttpRequest) => string;
 	errUploadTimeout?: (xhr: XMLHttpRequest) => string;
-	renameFile?: (name: string) => string;
+	renameFile?: (name: VTransmitFile) => string;
 	http: any;
 };
 export declare type XHRUploadGroup = {
@@ -112,7 +112,7 @@ export declare class AxiosDriver<T = any> implements DriverInterface {
 	responseType: StaticOrDynamic<XMLHttpRequestResponseType>;
 	errUploadError: (xhr: XMLHttpRequest) => string;
 	errUploadTimeout: (xhr: XMLHttpRequest) => string;
-	renameFile: (name: string) => string;
+	renameFile: (name: VTransmitFile) => string;
 	responseParseFunc?: (xhr: XMLHttpRequest) => T;
 	http: any;
 	private uploadGroups;
