@@ -650,13 +650,23 @@ export default Vue.extend({
 
 			this.processingThumbnail = true;
 			if ((file = this.thumbnailQueue.shift())) {
-				this.createThumbnail(file, () => {
-					this.processingThumbnail = false;
-					this.processThumbnailQueue();
-				});
+				this.createThumbnail(
+					file,
+					this.thumbnailWidth,
+					this.thumbnailHeight,
+					() => {
+						this.processingThumbnail = false;
+						this.processThumbnailQueue();
+					}
+				);
 			}
 		},
-		createThumbnail(file: VTransmitFile, callback = noop): void {
+		createThumbnail(
+			file: VTransmitFile,
+			width: number,
+			height: number,
+			callback = noop
+		): void {
 			const reader = new FileReader();
 			reader.addEventListener(
 				"load",
@@ -666,7 +676,13 @@ export default Vue.extend({
 						this.$emit(VTransmitEvents.Thumbnail, file, reader.result);
 						callback();
 					}
-					this.createThumbnailFromUrl(file, reader.result, callback);
+					this.createThumbnailFromUrl(
+						file,
+						reader.result,
+						width,
+						height,
+						callback
+					);
 				},
 				false
 			);
@@ -677,6 +693,8 @@ export default Vue.extend({
 		createThumbnailFromUrl(
 			file: VTransmitFile,
 			imageUrl: string,
+			width: number,
+			height: number,
 			callback?: Function
 		): void {
 			const imgEl = document.createElement("img");
@@ -687,10 +705,7 @@ export default Vue.extend({
 					let ctx: CanvasRenderingContext2D | null;
 					file.width = imgEl.width;
 					file.height = imgEl.height;
-					const resizeInfo = this.resize(file, {
-						width: this.thumbnailWidth,
-						height: this.thumbnailHeight,
-					});
+					const resizeInfo = this.resize(file, { width, height });
 					const canvas = document.createElement("canvas");
 					// Can be null
 					if (!(ctx = canvas.getContext("2d"))) {

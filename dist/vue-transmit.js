@@ -1190,13 +1190,18 @@
 				}
 				this.processingThumbnail = true;
 				if ((file = this.thumbnailQueue.shift())) {
-					this.createThumbnail(file, function() {
-						_this.processingThumbnail = false;
-						_this.processThumbnailQueue();
-					});
+					this.createThumbnail(
+						file,
+						this.thumbnailWidth,
+						this.thumbnailHeight,
+						function() {
+							_this.processingThumbnail = false;
+							_this.processThumbnailQueue();
+						}
+					);
 				}
 			},
-			createThumbnail: function(file, callback) {
+			createThumbnail: function(file, width, height, callback) {
 				var _this = this;
 				if (callback === void 0) {
 					callback = noop;
@@ -1214,14 +1219,26 @@
 							);
 							callback();
 						}
-						_this.createThumbnailFromUrl(file, reader.result, callback);
+						_this.createThumbnailFromUrl(
+							file,
+							reader.result,
+							width,
+							height,
+							callback
+						);
 					},
 					false
 				);
 				// FileReader requires a native File|Blob object
 				reader.readAsDataURL(file.nativeFile);
 			},
-			createThumbnailFromUrl: function(file, imageUrl, callback) {
+			createThumbnailFromUrl: function(
+				file,
+				imageUrl,
+				width,
+				height,
+				callback
+			) {
 				var _this = this;
 				var imgEl = document.createElement("img");
 				imgEl.addEventListener(
@@ -1231,8 +1248,8 @@
 						file.width = imgEl.width;
 						file.height = imgEl.height;
 						var resizeInfo = _this.resize(file, {
-							width: _this.thumbnailWidth,
-							height: _this.thumbnailHeight,
+							width: width,
+							height: height,
 						});
 						var canvas = document.createElement("canvas");
 						// Can be null
