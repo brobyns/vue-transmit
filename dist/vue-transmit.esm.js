@@ -323,7 +323,6 @@ var AxiosDriver = /** @class */ (function() {
 					? {
 							Accept: "application/json",
 							"Cache-Control": "no-cache",
-							"X-Requested-With": "XMLHttpRequest",
 					  }
 					: _g,
 			_h = options.responseType,

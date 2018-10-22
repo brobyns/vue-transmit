@@ -154,7 +154,6 @@ export class AxiosDriver<T = any> implements DriverInterface {
 			headers = {
 				Accept: "application/json",
 				"Cache-Control": "no-cache",
-				"X-Requested-With": "XMLHttpRequest",
 			},
 			responseType = "json",
 			responseParseFunc,
