@@ -533,56 +533,43 @@ var VueTransmit = Vue.extend({
 		var _h = _vm.$createElement;
 		var _c = _vm._self._c || _h;
 		return _c(
-			_vm.tag,
-			{ tag: "component" },
-			[
-				_vm.filesSlotFirst
-					? _vm._t("files", null, null, _vm.fileSlotBindings)
-					: _vm._e(),
-				_vm._v(" "),
-				_c(
-					"div",
-					_vm._g(
-						_vm._b(
-							{
-								staticClass: "v-transmit__upload-area",
-								class: [_vm.isDraggingClass, _vm.uploadAreaClasses],
-								attrs: { draggable: !_vm.disableDraggable },
-								on: {
-									click: _vm.handleClickUploaderAction,
-									dragstart: _vm.handleDragStart,
-									dragend: _vm.handleDragEnd,
-									dragenter: function($event) {
-										$event.preventDefault();
-										$event.stopPropagation();
-										return _vm.handleDragEnter($event);
-									},
-									dragover: function($event) {
-										$event.preventDefault();
-										$event.stopPropagation();
-										return _vm.handleDragOver($event);
-									},
-									dragleave: _vm.handleDragLeave,
-									drop: function($event) {
-										$event.preventDefault();
-										$event.stopPropagation();
-										return _vm.handleDrop($event);
-									},
-								},
+			"div",
+			_vm._g(
+				_vm._b(
+					{
+						staticClass: "v-transmit__upload-area",
+						class: [_vm.isDraggingClass, _vm.uploadAreaClasses],
+						attrs: { draggable: !_vm.disableDraggable },
+						on: {
+							click: _vm.handleClickUploaderAction,
+							dragstart: _vm.handleDragStart,
+							dragend: _vm.handleDragEnd,
+							dragenter: function($event) {
+								$event.preventDefault();
+								$event.stopPropagation();
+								return _vm.handleDragEnter($event);
 							},
-							"div",
-							_vm.uploadAreaAttrs,
-							false
-						),
-						_vm.uploadAreaListeners
-					),
-					[_vm._t("default")],
-					2
+							dragover: function($event) {
+								$event.preventDefault();
+								$event.stopPropagation();
+								return _vm.handleDragOver($event);
+							},
+							dragleave: _vm.handleDragLeave,
+							drop: function($event) {
+								$event.preventDefault();
+								$event.stopPropagation();
+								return _vm.handleDrop($event);
+							},
+						},
+					},
+					"div",
+					_vm.uploadAreaAttrs,
+					false
 				),
-				_vm._v(" "),
-				!_vm.filesSlotFirst
-					? _vm._t("files", null, null, _vm.fileSlotBindings)
-					: _vm._e(),
+				_vm.uploadAreaListeners
+			),
+			[
+				_vm._t("files", null, null, _vm.fileSlotBindings),
 				_vm._v(" "),
 				_c("form", { ref: "uploadForm", style: _vm.formStyles }, [
 					_c("input", {
@@ -604,10 +591,6 @@ var VueTransmit = Vue.extend({
 	staticRenderFns: [],
 	name: "VueTransmit",
 	props: {
-		tag: {
-			type: String,
-			default: "div",
-		},
 		disableDraggable: {
 			type: Boolean,
 			default: false,
