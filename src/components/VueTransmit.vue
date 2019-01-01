@@ -13,6 +13,7 @@
        @drop.prevent.stop="handleDrop">
     <slot name="files"
           v-bind="fileSlotBindings">
+    </slot>
       <form :style="formStyles"
             ref="uploadForm">
         <input type="file"
@@ -23,7 +24,6 @@
                :capture="capture"
                @change="onFileInputChange">
       </form>
-    </slot>
   </div>
 </template>
 
