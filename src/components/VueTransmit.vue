@@ -11,7 +11,7 @@
        @dragover.prevent.stop="handleDragOver"
        @dragleave="handleDragLeave"
        @drop.prevent.stop="handleDrop">
-    <slot v-bind="fileSlotBindings"></slot>
+    <slot name="files" v-bind="fileSlotBindings"/>
     <form :style="formStyles"
           ref="uploadForm">
       <input type="file"
