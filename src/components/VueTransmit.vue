@@ -1,32 +1,30 @@
 <template>
-   <component :is="tag">
-      <div class="v-transmit__upload-area"
-           :class="[isDraggingClass, uploadAreaClasses]"
-           :draggable="!disableDraggable"
-           v-bind="uploadAreaAttrs"
-           v-on="uploadAreaListeners"
-           @click="handleClickUploaderAction"
-           @dragstart="handleDragStart"
-           @dragend="handleDragEnd"
-           @dragenter.prevent.stop="handleDragEnter"
-           @dragover.prevent.stop="handleDragOver"
-           @dragleave="handleDragLeave"
-           @drop.prevent.stop="handleDrop">
-         <slot name="files"
-               v-bind="fileSlotBindings">
-           <form :style="formStyles"
-                 ref="uploadForm">
-             <input type="file"
-                    ref="hiddenFileInput"
-                    :multiple="multiple"
-                    :class="[maxFilesReachedClass]"
-                    :accept="filesToAccept"
-                    :capture="capture"
-                    @change="onFileInputChange">
-           </form>
-         </slot>
-      </div>
-   </component>
+  <div class="v-transmit__upload-area"
+       :class="[isDraggingClass, uploadAreaClasses]"
+       :draggable="!disableDraggable"
+       v-bind="uploadAreaAttrs"
+       v-on="uploadAreaListeners"
+       @click="handleClickUploaderAction"
+       @dragstart="handleDragStart"
+       @dragend="handleDragEnd"
+       @dragenter.prevent.stop="handleDragEnter"
+       @dragover.prevent.stop="handleDragOver"
+       @dragleave="handleDragLeave"
+       @drop.prevent.stop="handleDrop">
+    <slot name="files"
+          v-bind="fileSlotBindings">
+      <form :style="formStyles"
+            ref="uploadForm">
+        <input type="file"
+               ref="hiddenFileInput"
+               :multiple="multiple"
+               :class="[maxFilesReachedClass]"
+               :accept="filesToAccept"
+               :capture="capture"
+               @change="onFileInputChange">
+      </form>
+    </slot>
+  </div>
 </template>
 
 <style>
@@ -85,10 +83,6 @@ export default Vue.extend({
 	name: "VueTransmit",
 
 	props: {
-		tag: {
-			type: String,
-			default: "div",
-		},
 		disableDraggable: {
 			type: Boolean,
 			default: false,
