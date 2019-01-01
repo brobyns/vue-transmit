@@ -1,8 +1,5 @@
 <template>
    <component :is="tag">
-      <slot v-if="filesSlotFirst"
-            name="files"
-            v-bind="fileSlotBindings" />
       <div class="v-transmit__upload-area"
            :class="[isDraggingClass, uploadAreaClasses]"
            :draggable="!disableDraggable"
@@ -15,22 +12,20 @@
            @dragover.prevent.stop="handleDragOver"
            @dragleave="handleDragLeave"
            @drop.prevent.stop="handleDrop">
-         <slot></slot>
+         <slot name="files"
+               v-bind="fileSlotBindings" />
+         <form :style="formStyles"
+               ref="uploadForm">
+            <input type="file"
+                   ref="hiddenFileInput"
+                   :multiple="multiple"
+                   :class="[maxFilesReachedClass]"
+                   :accept="filesToAccept"
+                   :capture="capture"
+                   @change="onFileInputChange">
+         </form>
       </div>
-      <slot v-if="!filesSlotFirst"
-            name="files"
-            v-bind="fileSlotBindings" />
-      <form :style="formStyles"
-            ref="uploadForm">
-         <input type="file"
-                ref="hiddenFileInput"
-                :multiple="multiple"
-                :class="[maxFilesReachedClass]"
-                :accept="filesToAccept"
-                :capture="capture"
-                @change="onFileInputChange">
-      </form>
-   </component :is="tag">
+   </component>
 </template>
 
 <style>
