@@ -1,30 +1,31 @@
 <template>
    <component :is="tag">
-      <div class="v-transmit__upload-area"
-           :class="[isDraggingClass, uploadAreaClasses]"
-           :draggable="!disableDraggable"
-           v-bind="uploadAreaAttrs"
-           v-on="uploadAreaListeners"
-           @click="handleClickUploaderAction"
-           @dragstart="handleDragStart"
-           @dragend="handleDragEnd"
-           @dragenter.prevent.stop="handleDragEnter"
-           @dragover.prevent.stop="handleDragOver"
-           @dragleave="handleDragLeave"
-           @drop.prevent.stop="handleDrop">
-         <slot name="files"
-               v-bind="fileSlotBindings" />
-         <form :style="formStyles"
-               ref="uploadForm">
-            <input type="file"
-                   ref="hiddenFileInput"
-                   :multiple="multiple"
-                   :class="[maxFilesReachedClass]"
-                   :accept="filesToAccept"
-                   :capture="capture"
-                   @change="onFileInputChange">
-         </form>
-      </div>
+      <slot name="files" v-bind="fileSlotBindings">
+         <div class="v-transmit__upload-area"
+              :class="[isDraggingClass, uploadAreaClasses]"
+              :draggable="!disableDraggable"
+              v-bind="uploadAreaAttrs"
+              v-on="uploadAreaListeners"
+              @click="handleClickUploaderAction"
+              @dragstart="handleDragStart"
+              @dragend="handleDragEnd"
+              @dragenter.prevent.stop="handleDragEnter"
+              @dragover.prevent.stop="handleDragOver"
+              @dragleave="handleDragLeave"
+              @drop.prevent.stop="handleDrop">
+
+            <form :style="formStyles"
+                  ref="uploadForm">
+               <input type="file"
+                      ref="hiddenFileInput"
+                      :multiple="multiple"
+                      :class="[maxFilesReachedClass]"
+                      :accept="filesToAccept"
+                      :capture="capture"
+                      @change="onFileInputChange">
+            </form>
+         </div>
+      </slot>
    </component>
 </template>
 
